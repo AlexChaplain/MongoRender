@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // Route to access database:
 app.get('/api/mongo/:item', function(req, res) {
 const client = new MongoClient(uri);
-const searchKey = "{ partID: '12345" + req.params.item + "' }";
+const searchKey = "{ partID: '" + req.params.item + "' }";
 console.log("Looking for: " + searchKey);
 
 async function run() {
