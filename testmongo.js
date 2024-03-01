@@ -15,18 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes will go here
 
-// Default route:
-app.get('/', function(req, res) {
-  const myquery = req.query;
-  var outstring = 'Starting... ';
-  res.send(outstring);
-});
-
-app.get('/say/:name', function(req, res) {
-  res.send('Hello ' + req.params.name + '!');
-});
-
-
 // Route to access database:
 app.get('/qi3HHZ4dWBF8QQOrj58ddjqEcU4GkD1CqbnfumWX3hz1U9TsjJX6SqX3kLhKaF1D/mongo/:item', function(req, res) {
 const client = new MongoClient(uri);
