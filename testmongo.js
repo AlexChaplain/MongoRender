@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
 // The uri string must be the connection string for the database (obtained on Atlas).
-const uri = "mongodb+srv://nonAdmin:<nonAdmin1>@cluster1.4c770wa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1";
+const uri = "mongodb+srv://alexchaplain:<password>@cluster1.4c770wa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1";
 
 // --- This is the standard stuff to get it to work on the browser
 const express = require('express');
@@ -14,15 +14,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // routes will go here
-// Route to access database:
-app.get('/qi3HHZ4dWBF8QQOrj58ddjqEcU4GkD1CqbnfumWX3hz1U9TsjJX6SqX3kLhKaF1D/mongo/:item', function(req, res) {
 
 // Default route:
-//app.get('/', function(req, res) {
-//  const myquery = req.query;
-//  var outstring = 'Starting... ';
-//  res.send(outstring);
-//});
+app.get('/', function(req, res) {
+  const myquery = req.query;
+  var outstring = 'Starting... ';
+  res.send(outstring);
+});
 
 app.get('/say/:name', function(req, res) {
   res.send('Hello ' + req.params.name + '!');
@@ -30,9 +28,9 @@ app.get('/say/:name', function(req, res) {
 
 
 // Route to access database:
-app.get('/qi3HHZ4dWBF8QQOrj58ddjqEcU4GkD1CqbnfumWX3hz1U9TsjJX6SqX3kLhKaF1Di/mongo/:item', function(req, res) {
-const client = new MongoClient(nonAdmin:<nonAdmin1>);
-const searchKey = "{ partID: '12345" + req.params.item + "' }";
+app.get('/qi3HHZ4dWBF8QQOrj58ddjqEcU4GkD1CqbnfumWX3hz1U9TsjJX6SqX3kLhKaF1D/mongo/:item', function(req, res) {
+const client = new MongoClient(mongodb+srv://alexchaplain:<password>@cluster1.4c770wa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1);
+const searchKey = "{ partID: '" + req.params.item + "' }";
 console.log("Looking for: " + searchKey);
 
 async function run() {
