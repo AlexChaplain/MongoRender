@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
 // The uri string must be the connection string for the database (obtained on Atlas).
-const uri = "mongodb+srv://testUser:Test1@cluster1.4c770wa.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://testUser:Test1@cluster1.4c770wa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1";
 
 // --- This is the standard stuff to get it to work on the browser
 const express = require('express');
@@ -15,7 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes will go here
 
-
+// Default route:
+app.get('/', function(req, res) {
+  res.send('Welcome to the homepage!');
+});
 
 
 // Route to access database:
