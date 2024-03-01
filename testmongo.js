@@ -31,7 +31,7 @@ app.get('/say/:name', function(req, res) {
 
 // Route to access database:
 app.get('/qi3HHZ4dWBF8QQOrj58ddjqEcU4GkD1CqbnfumWX3hz1U9TsjJX6SqX3kLhKaF1Di/mongo/:item', function(req, res) {
-const client = new MongoClient(uri);
+const client = new MongoClient(mongodb+srv://nonAdmin:<nonAdmin1>@cluster1.4c770wa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1);
 const searchKey = "{ partID: '12345" + req.params.item + "' }";
 console.log("Looking for: " + searchKey);
 
