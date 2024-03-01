@@ -18,11 +18,11 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/qi3HHZ4dWBF8QQOrj58ddjqEcU4GkD1CqbnfumWX3hz1U9TsjJX6SqX3kLhKaF1D/mongo/:item', function(req, res) {
 }
 // Default route:
-app.get('/', function(req, res) {
-  const myquery = req.query;
-  var outstring = 'Starting... ';
-  res.send(outstring);
-});
+//app.get('/', function(req, res) {
+//  const myquery = req.query;
+//  var outstring = 'Starting... ';
+//  res.send(outstring);
+//});
 
 app.get('/say/:name', function(req, res) {
   res.send('Hello ' + req.params.name + '!');
