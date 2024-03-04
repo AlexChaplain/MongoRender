@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes will go here
 
+
 // Route to access database:
 app.get('/api/mongo/:item', function(req, res) {
 const client = new MongoClient(uri);
@@ -29,6 +30,7 @@ async function run() {
     // Hardwired Query for a part that has partID '12345'
     // const query = { partID: '12345' };
     // But we will use the parameter provided with the route
+    
     const query = { partID: req.params.item };
 
     const part = await parts.findOne(query);
