@@ -99,7 +99,7 @@ app.post('/register', async (req, res) => {
     const client = new MongoClient(uri);
     await client.connect();
     const db = client.db('ChapDB'); 
-    const users = db.collection('Ssers'); 
+    const users = db.collection('Users'); 
 
     // Check if the current user already exists
     const existingUser = await users.findOne({ user_ID });
