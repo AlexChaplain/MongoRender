@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
     res.send(`You are successfully authenticated with token: ${req.cookies.authToken}`);
   } else {
     res.send(`
-        <h2>Welcome to our site!</h2>
+        <h2>Welcome to my site!</h2>
         <button onclick="window.location.href='/register'">Register</button>
         <button onclick="window.location.href='/login'">Login</button>
     `);
