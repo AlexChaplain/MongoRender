@@ -28,17 +28,18 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Default endpoint
 app.get('/', (req, res) => {
   if (req.cookies.authToken) {
     res.send(`You are successfully authenticated with token: ${req.cookies.authToken}`);
   } else {
     res.send(`
-        <div class="container">
-          <h2>Welcome!</h2>
-          <button onclick="window.location.href='/register'">Register</button>
-          <button onclick="window.location.href='/login'">Login</button>
-        </div>
+      <div style="text-align: center;">
+        <h2>Welcome!</h2>
+        <button onclick="window.location.href='/register'">Register</button>
+        <button onclick="window.location.href='/login'">Login</button>
+      </div>
     `);
   }
 });
@@ -46,11 +47,13 @@ app.get('/', (req, res) => {
 // Login form
 app.get('/login', (req, res) => {
   res.send(`
-      <div class="container">
+      <div style="text-align: center;">
         <h2>Login</h2>
         <form method="post" action="/login">
-            <input type="text" name="user_ID" placeholder="Username" required><br>
-            <input type="password" name="password" placeholder="Password" required><br>
+            <label for="user_ID">Username:</label><br>
+            <input type="text" id="user_ID" name="user_ID" required><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required><br>
             <button type="submit">Login</button>
         </form>
       </div>
@@ -60,15 +63,32 @@ app.get('/login', (req, res) => {
 // Register form
 app.get('/register', (req, res) => {
   res.send(`
-      <div class="container">
+      <div style="text-align: center;">
         <h2>Register</h2>
         <form method="post" action="/register">
-            <input type="text" name="user_ID" placeholder="Username" required><br>
-            <input type="password" name="password" placeholder="Password" required><br>
+            <label for="user_ID">Username:</label><br>
+            <input type="text" id="user_ID" name="user_ID" required><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required><br>
             <button type="submit">Register</button>
         </form>
       </div>
   `);
+});
+
+// Print all cookies endpoint
+app.get('/cookies', (req, res) => {
+  if (req.cookies) {
+    res.send(`Active Cookies: ${JSON.stringify(req.cookies)}<br><a href="/clear-cookie">Clear Cookie</a>`);
+  } else {
+    res.send(`No cookies found!<br><a href="/">Return to home</a>`);
+  }
+});
+
+// Clear cookie endpoint
+app.get('/clear-cookie', (req, res) => {
+  res.clearCookie('authToken');
+  res.send('Cookie cleared successfully!<br><a href="/">Return to home</a>');
 });
 
 // Custom hashing function using SHA-256
@@ -89,8 +109,8 @@ app.post('/register', async (req, res) => {
     // Connect to my MongoDB
     const client = new MongoClient(uri);
     await client.connect();
-    const db = client.db('ChapDB'); 
-    const users = db.collection('Users'); 
+    const db = client.db('ChapDB');
+    const users = db.collection('Users');
 
     // Check if the current user already exists
     const existingUser = await users.findOne({ user_ID });
@@ -98,7 +118,7 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Current User already exists' });
     }
 
-    // Insert the new user into the given database 
+    // Insert the new user into the given database
     await users.insertOne({ user_ID, password: hashedPassword });
     await client.close();
 
