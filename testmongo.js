@@ -28,7 +28,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Default endpoint
 app.get('/', (req, res) => {
   if (req.cookies.authToken) {
@@ -98,8 +97,8 @@ app.post('/register', async (req, res) => {
     // Connect to MongoDB
     const client = new MongoClient(uri);
     await client.connect();
-    const db = client.db('ChapDB'); 
-    const users = db.collection('Users'); 
+    const db = client.db('ChapDB');
+    const users = db.collection('Users');
 
     // Check if the user already exists
     const existingUser = await users.findOne({ user_ID });
@@ -115,7 +114,7 @@ app.post('/register', async (req, res) => {
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error('Error registering user:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: error.message || 'Internal Server Error' });
   }
 });
 
@@ -127,8 +126,8 @@ app.post('/login', async (req, res) => {
     // Connect to MongoDB
     const client = new MongoClient(uri);
     await client.connect();
-    const db = client.db('ChapDB'); 
-    const users = db.collection('Users'); 
+    const db = client.db('ChapDB');
+    const users = db.collection('Users');
 
     // Find the user in the database
     const user = await users.findOne({ user_ID });
@@ -151,6 +150,6 @@ app.post('/login', async (req, res) => {
     res.redirect('/');
   } catch (error) {
     console.error('Error logging in:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: error.message || 'Internal Server Error' });
   }
 });
