@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const uri = "mongodb+srv://testUser:Test1@cluster1.4c770wa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1";
-const crypto = require('crypto'); // Import the crypto module
+const crypto = require('crypto');
 
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`);
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     });
     req.cookies = cookies;
   } else {
-    req.cookies = {}; // Set an empty object if no cookies are present
+    req.cookies = {};
   }
   next();
 });
