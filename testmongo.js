@@ -150,7 +150,7 @@ app.post('/login', async (req, res) => {
     res.cookie('authToken', user_ID, { httpOnly: true });
 
     // Redirect to the homepage
-    res.redirect('/Home');
+    res.redirect('/home');
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ error: 'Internal Server Error' });
