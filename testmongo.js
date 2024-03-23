@@ -12,23 +12,22 @@ app.listen(port, () => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Custom hashing function using SHA-256
-function hashPassword(password) {
-  const hash = crypto.createHash('sha256');
-  hash.update(password);
-  return hash.digest('hex');
-}
+// Parse cookies from request headers
+app.use((req, res, next) => {
+  if (req.headers.cookie) {
+    const rawCookies = req.headers.cookie.split('; ');
+    const cookies = {};
+    rawCookies.forEach(rawCookie => {
+      const parsedCookie = rawCookie.split('=');
+      cookies[parsedCookie[0]] = parsedCookie[1];
+    });
+    req.cookies = cookies;
+  } else {
+    req.cookies = {}; // Set an empty object if no cookies are present
+  }
+  next();
+});
 
-// Connect to MongoDB once
-const client = new MongoClient(uri);
-
-client.connect()
-  .then(() => {
-    console.log("Connected to MongoDB successfully");
-  })
-  .catch(err => {
-    console.error("Error connecting to MongoDB:", err);
-  });
 
 // Default endpoint
 app.get('/', (req, res) => {
@@ -55,7 +54,6 @@ app.get('/register', (req, res) => {
   `);
 });
 
-// Login form
 app.get('/login', (req, res) => {
   res.send(`
       <h2>Login</h2>
@@ -65,56 +63,6 @@ app.get('/login', (req, res) => {
           <button type="submit">Login</button>
       </form>
   `);
-});
-
-// Register endpoint
-app.post('/register', async (req, res) => {
-  try {
-    const { user_ID, password } = req.body;
-
-    const hashedPassword = hashPassword(password);
-
-    const db = client.db('ChapDB');
-    const users = db.collection('Users');
-
-    const existingUser = await users.findOne({ user_ID });
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
-
-    await users.insertOne({ user_ID, password: hashedPassword });
-
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-// Login endpoint
-app.post('/login', async (req, res) => {
-  try {
-    const { user_ID, password } = req.body;
-
-    const db = client.db('ChapDB');
-    const users = db.collection('Users');
-
-    const user = await users.findOne({ user_ID });
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    const hashedPassword = hashPassword(password);
-    if (hashedPassword !== user.password) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    res.cookie('authToken', user_ID, { httpOnly: true });
-    res.redirect('/');
-  } catch (error) {
-    console.error('Error logging in:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
 });
 
 // Print all cookies endpoint
@@ -130,4 +78,79 @@ app.get('/cookies', (req, res) => {
 app.get('/clear-cookie', (req, res) => {
   res.clearCookie('authToken');
   res.send('Cookie cleared successfully!<br><a href="/">Return to home</a>');
+});
+
+// Custom hashing function using SHA-256
+function hashPassword(password) {
+  const hash = crypto.createHash('sha256');
+  hash.update(password);
+  return hash.digest('hex');
+}
+
+app.post('/register', async (req, res) => {
+  try {
+    // Extract user details from request body
+    const { user_ID, password } = req.body;
+
+    // Hash the password using custom hashing function
+    const hashedPassword = hashPassword(password);
+
+    // Connect to MongoDB
+    const client = new MongoClient(uri);
+    await client.connect();
+    const db = client.db('ChapDB'); 
+    const users = db.collection('Users'); 
+
+    // Check if the user already exists
+    const existingUser = await users.findOne({ user_ID });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    // Insert the new user into the database
+    await users.insertOne({ user_ID, password: hashedPassword });
+    await client.close();
+
+    // Respond with success message
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/login', async (req, res) => {
+  try {
+    // Extract user details from request body
+    const { user_ID, password } = req.body;
+
+    // Connect to MongoDB
+    const client = new MongoClient(uri);
+    await client.connect();
+    const db = client.db('ChapDB'); 
+    const users = db.collection('Users'); 
+
+    // Find the user in the database
+    const user = await users.findOne({ user_ID });
+    if (!user) {
+      // User not found
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Hash the provided password and compare with the stored hashed password
+    const hashedPassword = hashPassword(password);
+    if (hashedPassword !== user.password) {
+      // Incorrect password
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Set cookie
+    res.cookie('authToken', user_ID, { httpOnly: true });
+
+    // Redirect to homepage
+    res.redirect('/');
+  } catch (error) {
+    console.error('Error logging in:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
