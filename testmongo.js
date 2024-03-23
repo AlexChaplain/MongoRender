@@ -98,7 +98,7 @@ app.post('/register', async (req, res) => {
     // Connect to MongoDB
     const client = new MongoClient(uri);
     await client.connect();
-    const db = client.db('Chapdb'); 
+    const db = client.db('ChapDB'); 
     const users = db.collection('Users'); 
 
     // Check if the user already exists
@@ -127,7 +127,7 @@ app.post('/login', async (req, res) => {
     // Connect to MongoDB
     const client = new MongoClient(uri);
     await client.connect();
-    const db = client.db('Chapdb'); 
+    const db = client.db('ChapDB'); 
     const users = db.collection('Users'); 
 
     // Find the user in the database
