@@ -28,6 +28,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Default endpoint
 app.get('/', (req, res) => {
   if (req.cookies.authToken) {
@@ -94,19 +95,19 @@ app.post('/register', async (req, res) => {
     // Hash the password using custom hashing function
     const hashedPassword = hashPassword(password);
 
-    // Connect to MongoDB
+    // Connect to my MongoDB
     const client = new MongoClient(uri);
     await client.connect();
-    const db = client.db('ChapDB');
-    const users = db.collection('Users');
+    const db = client.db('ChapDB'); 
+    const users = db.collection('Ssers'); 
 
-    // Check if the user already exists
+    // Check if the current user already exists
     const existingUser = await users.findOne({ user_ID });
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Insert the new user into the database
+    // Insert the new user into the given database
     await users.insertOne({ user_ID, password: hashedPassword });
     await client.close();
 
@@ -114,7 +115,7 @@ app.post('/register', async (req, res) => {
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error('Error registering user:', error);
-    res.status(500).json({ error: error.message || 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -136,20 +137,23 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Hash the provided password and compare with the stored hashed password
+    // Hash the provided password and compare with stored hashed password
     const hashedPassword = hashPassword(password);
     if (hashedPassword !== user.password) {
       // Incorrect password
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Set cookie
+    // Set the cookie
     res.cookie('authToken', user_ID, { httpOnly: true });
 
-    // Redirect to homepage
+    // Redirect to the homepage
     res.redirect('/');
   } catch (error) {
     console.error('Error logging in:', error);
-    res.status(500).json({ error: error.message || 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
