@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 // Default endpoint
 app.get('/', (req, res) => {
   if (req.cookies.authToken) {
-    res.send(`You are authenticated with token: ${req.cookies.authToken}`);
+    res.send(`You are successfully authenticated with token: ${req.cookies.authToken}`);
   } else {
     res.send(`
         <h2>Welcome to our site!</h2>
@@ -104,7 +104,7 @@ app.post('/register', async (req, res) => {
     // Check if the current user already exists
     const existingUser = await users.findOne({ user_ID });
     if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
+      return res.status(400).json({ error: 'Current User already exists' });
     }
 
     // Insert the new user into the given database
@@ -112,7 +112,7 @@ app.post('/register', async (req, res) => {
     await client.close();
 
     // Respond with success message
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: 'User has been registered successfully' });
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ error: 'Internal Server Error' });
