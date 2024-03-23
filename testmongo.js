@@ -76,7 +76,7 @@ app.get('/register', (req, res) => {
   `);
 });
 
-// Print all cookies endpoint
+// Print all cookies endpoint T4-REF
 app.get('/cookies', (req, res) => {
   if (req.cookies) {
     res.send(`Active Cookies: ${JSON.stringify(req.cookies)}<br><a href="/clear-cookie">Clear Cookie</a>`);
@@ -85,7 +85,7 @@ app.get('/cookies', (req, res) => {
   }
 });
 
-// Clear cookie endpoint
+// Clear cookie endpoint T5-REF
 app.get('/clear-cookie', (req, res) => {
   res.clearCookie('authToken');
   res.send('Cookie cleared successfully!<br><a href="/">Return to home</a>');
@@ -112,7 +112,7 @@ app.post('/register', async (req, res) => {
     const db = client.db('ChapDB');
     const users = db.collection('Users');
 
-    // Check if the current user already exists
+    // Check if the current user already exists T3-REF 
     const existingUser = await users.findOne({ user_ID });
     if (existingUser) {
       return res.status(400).json({ error: 'Current User already exists' });
@@ -141,7 +141,7 @@ app.post('/login', async (req, res) => {
     const db = client.db('ChapDB');
     const users = db.collection('Users');
 
-    // Find the user in the database
+    // Find the user in the database T3.1-REF
     const user = await users.findOne({ user_ID });
     if (!user) {
       // User not found
@@ -155,7 +155,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Set the cookie
+    // Set the cookie T3.2-REF
     res.cookie('authToken', user_ID, { httpOnly: true });
 
     // Redirect to the homepage
