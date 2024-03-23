@@ -42,6 +42,17 @@ app.get('/', (req, res) => {
   }
 });
 
+// Login form
+app.get('/login', (req, res) => {
+  res.send(`
+      <h2>Login</h2>
+      <form method="post" action="/login">
+          <input type="text" name="user_ID" placeholder="Username" required><br>
+          <input type="password" name="password" placeholder="Password" required><br>
+          <button type="submit">Login</button>
+      </form>
+  `);
+});
 // Register form
 app.get('/register', (req, res) => {
   res.send(`
@@ -50,17 +61,6 @@ app.get('/register', (req, res) => {
           <input type="text" name="user_ID" placeholder="Username" required><br>
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Register</button>
-      </form>
-  `);
-});
-
-app.get('/login', (req, res) => {
-  res.send(`
-      <h2>Login</h2>
-      <form method="post" action="/login">
-          <input type="text" name="user_ID" placeholder="Username" required><br>
-          <input type="password" name="password" placeholder="Password" required><br>
-          <button type="submit">Login</button>
       </form>
   `);
 });
