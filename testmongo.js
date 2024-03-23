@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
     res.send(`You are successfully authenticated with token: ${req.cookies.authToken}`);
   } else {
     res.send(`
-        <h2>Welcome to my site!</h2>
+        <h2>Welcome to our site!</h2>
         <button onclick="window.location.href='/register'">Register</button>
         <button onclick="window.location.href='/login'">Login</button>
     `);
@@ -65,7 +65,7 @@ app.get('/login', (req, res) => {
   `);
 });
 
-// Print all cookies endpoint
+// Print all cookies endpoint T4-REF
 app.get('/cookies', (req, res) => {
   if (req.cookies) {
     res.send(`Active Cookies: ${JSON.stringify(req.cookies)}<br><a href="/clear-cookie">Clear Cookie</a>`);
@@ -74,7 +74,7 @@ app.get('/cookies', (req, res) => {
   }
 });
 
-// Clear cookie endpoint
+// Clear cookie endpoint T5-REF
 app.get('/clear-cookie', (req, res) => {
   res.clearCookie('authToken');
   res.send('Cookie cleared successfully!<br><a href="/">Return to home</a>');
@@ -154,6 +154,3 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-
