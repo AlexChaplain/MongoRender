@@ -35,25 +35,14 @@ app.get('/', (req, res) => {
     res.send(`You are successfully authenticated with token: ${req.cookies.authToken}`);
   } else {
     res.send(`
-        <h2>Welcome to our site!</h2>
+        <h2>Welcome!</h2>
         <button onclick="window.location.href='/register'">Register</button>
         <button onclick="window.location.href='/login'">Login</button>
     `);
   }
 });
 
-// Register form
-app.get('/register', (req, res) => {
-  res.send(`
-      <h2>Register</h2>
-      <form method="post" action="/register">
-          <input type="text" name="user_ID" placeholder="Username" required><br>
-          <input type="password" name="password" placeholder="Password" required><br>
-          <button type="submit">Register</button>
-      </form>
-  `);
-});
-
+// Login form
 app.get('/login', (req, res) => {
   res.send(`
       <h2>Login</h2>
@@ -61,6 +50,19 @@ app.get('/login', (req, res) => {
           <input type="text" name="user_ID" placeholder="Username" required><br>
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Login</button>
+      </form>
+  `);
+});
+
+// Register form
+
+app.get('/register', (req, res) => {
+  res.send(`
+      <h2>Register</h2>
+      <form method="post" action="/register">
+          <input type="text" name="user_ID" placeholder="Username" required><br>
+          <input type="password" name="password" placeholder="Password" required><br>
+          <button type="submit">Register</button>
       </form>
   `);
 });
